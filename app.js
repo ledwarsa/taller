@@ -151,7 +151,7 @@ const App = {
                      :class="['col-' + index, { 'active': activeCol === index }]"
                      :style="{ backgroundImage: 'url(\\'' + col.image + '\\')' }"
                      @mouseenter="activeCol = index"
-                     @mouseleave="activeCol = null">
+                     @mouseleave="activeCol = null; activeSubcategory = null">
                      
                     <div class="col-overlay"></div>
                     <div class="col-content">
@@ -161,21 +161,44 @@ const App = {
                     <!-- Products Modal / Flyout when active -->
                     <div class="products-flyout" :class="{ 'show': activeCol === index }">
                         <div class="products-scroll" 
+                             :class="{ 'sub-categories': col.category === 'pijamas' && !activeSubcategory }"
                              :ref="el => { if (el) scrollRefs[index] = el }" 
                              @mouseenter="pauseScroll" 
                              @mouseleave="resumeScroll"
                              @wheel.prevent="handleWheel"
                              @touchstart="pauseScroll"
                              @touchend="resumeScroll">
-                            <div class="product-card" v-for="product in (categoryProductsList[col.category] || [])" :key="product.title" @click="selectProduct(product, col)">
-                                <img :src="product.image" :alt="product.title" loading="lazy">
-                                <h3>{{ product.title }}</h3>
-                                <p class="price">\${{ product.price }}</p>
-                                <button class="btn-buy">VER MÁS</button>
-                            </div>
-                            <div class="no-products" v-if="(categoryProductsList[col.category] || []).length === 0">
-                                Próximamente
-                            </div>
+                            <template v-if="col.category !== 'pijamas'">
+                                <div class="product-card" v-for="product in (categoryProductsList[col.category] || [])" :key="product.title" @click="selectProduct(product, col)">
+                                    <img :src="product.image" :alt="product.title" loading="lazy">
+                                    <h3>{{ product.title }}</h3>
+                                    <p class="price">\${{ product.price }}</p>
+                                    <button class="btn-buy">VER MÁS</button>
+                                </div>
+                                <div class="no-products" v-if="(categoryProductsList[col.category] || []).length === 0">
+                                    Próximamente
+                                </div>
+                            </template>
+                            <template v-else>
+                                <template v-if="!activeSubcategory">
+                                    <div class="product-card" v-for="product in (categoryProductsList[col.category] || []).filter(p => p.price === '0')" :key="product.title" @click="selectProduct(product, col)">
+                                        <img :src="product.image" :alt="product.title" loading="lazy">
+                                        <h3>{{ product.title }}</h3>
+                                        <button class="btn-buy">VER MÁS</button>
+                                    </div>
+                                </template>
+                                <template v-else>
+                                    <div class="back-btn-container">
+                                        <button class="btn-back-subcategory" @click.stop="activeSubcategory = null"><i class="fa-solid fa-arrow-left"></i> Volver</button>
+                                    </div>
+                                    <div class="product-card" v-for="product in (categoryProductsList[col.category] || []).filter(p => p.subcategory === activeSubcategory)" :key="product.title" @click="selectProduct(product, col)">
+                                        <img :src="product.image" :alt="product.title" loading="lazy">
+                                        <h3>{{ product.title }}</h3>
+                                        <p class="price">\${{ product.price }}</p>
+                                        <button class="btn-buy">VER MÁS</button>
+                                    </div>
+                                </template>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -269,8 +292,8 @@ const App = {
                 </div>
                 <div class="slider-controls">
                     <span class="slide-num">01</span>
-                    <div class="progress-bar"><div class="progress-fill" :style="{ width: ((activeCol !== null ? activeCol + 1 : 1) * 25) + '%' }"></div></div>
-                    <span class="slide-num">04</span>
+                    <div class="progress-bar"><div class="progress-fill" :style="{ width: ((activeCol !== null ? activeCol + 1 : 1) * 20) + '%' }"></div></div>
+                    <span class="slide-num">05</span>
                     <button class="nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
                     <button class="nav-btn"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
@@ -283,10 +306,12 @@ const App = {
             { id: 1, title: 'Material Pedagógico', category: 'material', image: './assets/material_bg.jpg' },
             { id: 2, title: 'Prendas de Vestir', category: 'prendas', image: './assets/prendas_bg.jpg' },
             { id: 3, title: 'Productos de Marca', category: 'marca', image: './assets/marca_bg.jpg' },
-            { id: 4, title: 'Todos los Productos', category: 'todos', image: './assets/todos_bg2.jpg' }
+            { id: 4, title: 'Pijamas', category: 'pijamas', image: './assets/Gemini_Generated_Image_li9jjvli9jjvli9j.jpg' },
+            { id: 5, title: 'Todos los Productos', category: 'todos', image: './assets/todos_bg2.jpg' }
         ]);
 
         const activeCol = ref(null);
+        const activeSubcategory = ref(null);
         const products = ref([]);
         const selectedProduct = ref(null);
         const selectedOptions = ref({});
@@ -317,8 +342,23 @@ const App = {
         const formatDescription = (desc) => {
             if (!desc) return 'Descripción no disponible.';
             let formatted = desc.replace(/^(Descripción|Producto):\s*/i, '').trim();
-            formatted = formatted.replace(/(Población:)/gi, '<strong>$1</strong>');
-            formatted = formatted.replace(/(Objetivo:)/gi, '<strong>$1</strong>');
+            
+            // Highlight existing keywords
+            formatted = formatted.replace(/(Población:)/gi, '<br><br><strong>$1</strong>');
+            formatted = formatted.replace(/(Objetivo:)/gi, '<br><br><strong>$1</strong>');
+            
+            // Highlight Pijamas keywords
+            formatted = formatted.replace(/(Tipo:)/gi, '<br><br><strong>$1</strong>');
+            formatted = formatted.replace(/(Tallas disponibles:)/gi, '<br><strong>$1</strong>');
+            formatted = formatted.replace(/(Color:)/gi, '<br><strong>$1</strong>');
+            formatted = formatted.replace(/(Características:)/gi, '<br><br><strong>$1</strong>');
+            formatted = formatted.replace(/(Composición de la tela:)/gi, '<br><br><strong>$1</strong>');
+            formatted = formatted.replace(/(Estas pijamas incluyen)/gi, '<br><br><strong>$1</strong>');
+            formatted = formatted.replace(/(Si la compra de la pijama se realiza desde el exterior)/gi, '<br><br><em>$1</em>');
+            
+            // Remove leading brs if any
+            formatted = formatted.replace(/^(<br\s*\/?>)+/i, '');
+            
             return formatted;
         };
 
@@ -370,7 +410,7 @@ const App = {
 
         onMounted(async () => {
             try {
-                const res = await fetch('./productos.json');
+                const res = await fetch('./productos.json?t=' + Date.now());
                 const data = await res.json();
                 products.value = data;
                 
@@ -385,7 +425,7 @@ const App = {
             const lists = {};
             if (!products.value) return lists;
             
-            ['material', 'prendas', 'marca', 'todos'].forEach(cat => {
+            ['material', 'prendas', 'marca', 'pijamas', 'todos'].forEach(cat => {
                 let result = [];
                 if (cat === 'todos') {
                     result = [...products.value];
@@ -422,6 +462,10 @@ const App = {
         });
 
         const selectProduct = (product, col) => {
+            if (col.category === 'pijamas' && product.price === '0') {
+                activeSubcategory.value = product.title;
+                return;
+            }
             selectedProduct.value = { data: product, column: col };
             
             // Initialize default selections (first option of each)
@@ -496,6 +540,7 @@ const App = {
         return {
             columns,
             activeCol,
+            activeSubcategory,
             products,
             categoryProductsList,
             selectedProduct,

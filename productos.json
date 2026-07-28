@@ -214,7 +214,8 @@
       }
     ],
     "url": "https://redcontraelabusosexual.org/producto/pijama-lila-rosa/",
-    "category": "prendas"
+    "category": "pijamas",
+    "subcategory": "Colección Los Pequeños Valientes"
   },
   {
     "title": "Paquete: Láminas x6",
@@ -243,7 +244,8 @@
       }
     ],
     "url": "https://redcontraelabusosexual.org/producto/pijama-aguamarina/",
-    "category": "prendas"
+    "category": "pijamas",
+    "subcategory": "Colección Libre y Segura"
   },
   {
     "title": "Pijama Tigre",
@@ -263,7 +265,8 @@
       }
     ],
     "url": "https://redcontraelabusosexual.org/producto/pijama-tigre/",
-    "category": "prendas"
+    "category": "pijamas",
+    "subcategory": "Colección Libre y Segura"
   },
   {
     "title": "Pijama Yako Roja",
@@ -283,7 +286,8 @@
       }
     ],
     "url": "https://redcontraelabusosexual.org/producto/pijama-yako-roja/",
-    "category": "prendas"
+    "category": "pijamas",
+    "subcategory": "Colección Los Pequeños Valientes"
   },
   {
     "title": "Pijama Yako",
@@ -303,7 +307,8 @@
       }
     ],
     "url": "https://redcontraelabusosexual.org/producto/pijama-yako/",
-    "category": "prendas"
+    "category": "pijamas",
+    "subcategory": "Colección Los Pequeños Valientes"
   },
   {
     "title": "Pijama Lila",
@@ -323,7 +328,8 @@
       }
     ],
     "url": "https://redcontraelabusosexual.org/producto/pijama-lila/",
-    "category": "prendas"
+    "category": "pijamas",
+    "subcategory": "Colección Los Pequeños Valientes"
   },
   {
     "title": "Ebook: Cuento Lisi y LPV Por Colombia",
@@ -458,5 +464,23 @@
     "options": [],
     "category": "material",
     "url": "https://redcontraelabusosexual.org/producto/los-ninos-del-viento-fisico/"
+  },
+  {
+    "title": "Colección Los Pequeños Valientes",
+    "price": "0",
+    "image": "./assets/Gemini_Generated_Image_9kgurg9kgurg9kgu.jpg",
+    "description": "Pijama Yako y Lila",
+    "options": [],
+    "url": "#",
+    "category": "pijamas"
+  },
+  {
+    "title": "Colección Libre y Segura",
+    "price": "0",
+    "image": "./assets/Gemini_Generated_Image_7om5i37om5i37om5.jpg",
+    "description": "Pijama Libre y Segura",
+    "options": [],
+    "url": "#",
+    "category": "pijamas"
   }
 ]
