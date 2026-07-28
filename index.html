@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - Taller de Yako y Lila</title>
+    <!-- Optimización de carga (CWV / LCP) -->
+    <link rel="preconnect" href="https://redcontraelabusosexual.org">
+    <link rel="preload" href="./assets/material_bg.jpg" as="image" fetchpriority="high">
+    <link rel="preload" href="./assets/prendas_bg.jpg" as="image" fetchpriority="high">
+    <link rel="preload" href="./assets/marca_bg.jpg" as="image" fetchpriority="high">
+    <link rel="preload" href="./assets/todos_bg2.jpg" as="image" fetchpriority="high">
+    <link rel="stylesheet" href="./style.css?v=6">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+        }
+      }
+    </script>
+</head>
+<body>
+    <div id="error-log" style="color:red; background:white; position:absolute; z-index:9999; top:0; left:0; width:100%; white-space:pre-wrap;"></div>
+    <script>
+      window.addEventListener('error', function(e) {
+        document.getElementById('error-log').innerText += e.message + ' at ' + e.filename + ':' + e.lineno + '\\n';
+      });
+      window.addEventListener('unhandledrejection', function(e) {
+        document.getElementById('error-log').innerText += e.reason + '\\n';
+      });
+    </script>
+    <div id="app">
+        <div style="color: white; padding: 50px; font-family: sans-serif;">
+            <h2>Cargando la interfaz...</h2>
+            <p>Si esta pantalla no desaparece en unos segundos, es probable que hayas abierto el archivo haciendo doble clic (con una ruta file:///).</p>
+            <p>Por seguridad, los navegadores bloquean la carga modular de Vue.js en archivos locales.</p>
+            <p>Por favor, asegúrate de ingresar a <strong>http://localhost:8000</strong> en tu navegador web después de iniciar el servidor local.</p>
+        </div>
+    </div>
+    <script type="module" src="./app.js?v=10"></script>
+</body>
+</html>

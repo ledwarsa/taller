@@ -1,0 +1,612 @@
+:root {
+    --col-1: #3b82f6; /* Blue */
+    --col-2: #f59e0b; /* Yellow */
+    --col-3: #ef4444; /* Red */
+    --col-4: #10b981; /* Green */
+    --font-main: 'Inter', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    overflow: hidden;
+    background-color: #000;
+}
+
+.layout-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Header */
+.header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.logo-container .logo {
+    height: 70px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.menu-icons {
+    pointer-events: auto;
+    display: flex;
+    gap: 25px;
+    color: white;
+    font-size: 1.5rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    cursor: pointer;
+}
+
+/* Columns */
+.grid-columns {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.column {
+    flex: 1;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.column.active {
+    flex: 2;
+}
+
+/* Overlay for colors */
+.col-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0.1) 100%);
+    transition: all 0.4s ease;
+    opacity: 0.8;
+}
+
+.column:hover .col-overlay {
+    opacity: 1;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.7) 40%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+.col-content {
+    position: absolute;
+    bottom: 150px;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.column.active .col-content {
+    transform: translateY(-360px);
+}
+
+.col-title {
+    color: white;
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    letter-spacing: 1px;
+    opacity: 1;
+    transition: transform 0.3s ease;
+}
+
+/* Products Flyout (Glassmorphism) */
+.products-flyout {
+    position: absolute;
+    bottom: -100%;
+    left: 0;
+    width: 100%;
+    height: 340px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: 20;
+    transition: bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    padding: 30px 20px;
+}
+
+.products-flyout.show {
+    bottom: 90px;
+}
+
+.products-scroll {
+    display: flex;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 25px;
+    overflow-x: auto;
+    overflow-y: hidden !important;
+    height: 100%;
+    align-items: flex-start;
+    padding-bottom: 25px; /* Give room for horizontal scrollbar */
+    scroll-behavior: auto; /* Required for JS smooth scroll */
+}
+
+.products-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+.products-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+}
+
+.product-card {
+    flex: 0 0 240px;
+    max-width: 240px;
+    min-width: 240px;
+    height: auto;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.product-card h3 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-align: center;
+    color: #1f2937;
+    margin-bottom: 6px;
+    flex-grow: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-card .price {
+    font-weight: 900;
+    color: #000;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.btn-buy {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+}
+
+.btn-buy:hover {
+    background: #374151;
+}
+
+.no-products {
+    color: white;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin: auto;
+}
+
+/* Bottom Bar */
+.bottom-bar {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    height: 90px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    z-index: 100;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.discover-link {
+    font-weight: 800;
+    color: #000;
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+}
+
+.footer-logo {
+    height: 85px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    transition: transform 0.3s ease;
+}
+
+.footer-logo:hover {
+    transform: scale(1.05);
+}
+
+.slider-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.slide-num {
+    font-weight: 600;
+    color: #9ca3af;
+    font-size: 0.85rem;
+}
+
+.progress-bar {
+    width: 80px;
+    height: 3px;
+    background: #e5e7eb;
+    position: relative;
+    border-radius: 2px;
+}
+
+.progress-fill {
+    width: 25%;
+    height: 100%;
+    background: #000;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #000;
+    padding: 5px;
+}
+
+/* Vue Transitions */
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.5s ease;
+}
+.fade-enter-from, .fade-leave-to {
+    opacity: 0;
+}
+
+.slide-up-enter-active, .slide-up-leave-active {
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.slide-up-enter-from, .slide-up-leave-to {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+.product-view-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    background-size: cover;
+    background-position: center;
+    z-index: 50; /* Below header, above columns */
+    display: flex;
+    flex-direction: column;
+}
+
+.product-view-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65); /* Darken the background */
+    z-index: 1;
+}
+
+.btn-close {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    z-index: 60;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-family: var(--font-main);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.3s ease;
+}
+
+.btn-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.product-view-content {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+.product-image-side {
+    flex: 1.5;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px;
+}
+
+.product-image-side img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+    border-radius: 12px;
+}
+
+.product-details-side {
+    flex: 1;
+    position: relative;
+    background: linear-gradient(135deg, rgba(239, 53, 45, 0.6) 0%, rgba(50, 0, 0, 0.9) 100%); /* Elegant semi-transparent dark red gradient */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 50px;
+}
+
+.glass-panel {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 40px;
+    color: white;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+.glass-panel h2 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+}
+
+.product-price {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 25px;
+    color: #ffd700; /* Gold/yellow touch */
+}
+
+.product-desc {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    opacity: 0.9;
+}
+
+.product-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.options-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.option-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 45px;
+    text-align: center;
+}
+
+.option-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.option-btn.active {
+    background: white;
+    color: #ef352d; /* Red text */
+    border-color: white;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}
+
+.btn-buy-large {
+    flex: 1;
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-buy-large:hover {
+    background: #e5e7eb;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* ==========================================================================
+   Mobile Responsiveness
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* Stack columns vertically */
+    .grid-columns {
+        flex-direction: column;
+    }
+
+    /* Adjust column height distribution */
+    .column {
+        flex: 1; /* 25% height by default */
+        transition: flex 0.5s ease;
+    }
+
+    .column.active {
+        flex: 2.5; /* Expanded height */
+    }
+
+    /* Header adjustments */
+    .header {
+        padding: 15px 20px;
+    }
+    
+    .bottom-bar {
+        height: 70px;
+    }
+
+    .bottom-bar .center-brand img {
+        height: 55px; /* Smaller logo in footer */
+    }
+
+    /* Column titles */
+    .col-title {
+        font-size: 1.3rem;
+    }
+
+    /* Adjust title position so it doesn't jump off screen vertically */
+    .col-content {
+        bottom: 30px;
+    }
+
+    .column.active .col-content {
+        transform: translateY(-210px); /* Push up slightly less */
+    }
+
+    /* Products Flyout */
+    .products-flyout {
+        height: 220px; /* Shorter for mobile */
+        padding: 15px 10px;
+    }
+
+    .products-flyout.show {
+        bottom: 70px; /* Above bottom bar */
+    }
+
+    /* Product Cards */
+    .product-card {
+        min-width: 140px; /* Smaller cards */
+        width: 140px;
+        padding: 12px;
+        gap: 8px;
+    }
+
+    .product-card img {
+        height: 90px;
+    }
+
+    .product-card h3 {
+        font-size: 0.8rem;
+    }
+
+    .product-card .price {
+        font-size: 0.9rem;
+        margin-top: auto;
+    }
+
+    .btn-buy {
+        font-size: 0.75rem;
+        padding: 6px 10px;
+    }
+
+    /* Product Details Modal */
+    .product-details {
+        flex-direction: column; /* Stack image and details vertically */
+        max-width: 90vw;
+        height: 85vh;
+        border-radius: 15px;
+    }
+
+    .product-image-side {
+        flex: 0.8; /* Take up less space than details on mobile */
+    }
+
+    .product-details-side {
+        flex: 1.2;
+        padding: 20px;
+        overflow-y: auto; /* Allow scrolling inside the details area */
+    }
+
+    .product-details-side h2 {
+        font-size: 1.3rem;
+    }
+
+    .product-desc {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
+
+    .options-container {
+        gap: 8px;
+    }
+
+    .option-btn {
+        padding: 6px 14px;
+        font-size: 0.8rem;
+    }
+}
