@@ -69,9 +69,73 @@ const App = {
                         </button>
                         <nav class="menu-nav">
                             <a href="https://redcontraelabusosexual.org/" target="_blank">INICIO</a>
-                            <a href="https://redcontraelabusosexual.org/nosotros/" target="_blank">NOSOTROS</a>
-                            <a href="https://redcontraelabusosexual.org/lineas-de-accion/" target="_blank">LÍNEAS DE ACCIÓN</a>
-                            <a href="https://redcontraelabusosexual.org/club-eva/" target="_blank">CLUB EVA</a>
+                            
+                            <details>
+                                <summary>NOSOTROS <i class="fa-solid fa-chevron-down"></i></summary>
+                                <div class="sub-menu">
+                                    <a href="https://redcontraelabusosexual.org/nosotros/alexandra-moreno-piraquive/" target="_blank">Alexandra Moreno Piraquive</a>
+                                    <a href="https://redcontraelabusosexual.org/nosotros/lisa-marie-wills-moreno/" target="_blank">Lisa Marie Wills Moreno</a>
+                                </div>
+                            </details>
+
+                            <details>
+                                <summary>LÍNEAS DE ACCIÓN <i class="fa-solid fa-chevron-down"></i></summary>
+                                <div class="sub-menu">
+                                    <details>
+                                        <summary>Tu Defensa es Tu Voz <i class="fa-solid fa-chevron-down"></i></summary>
+                                        <div class="sub-menu">
+                                            <a href="https://redcontraelabusosexual.org/definiciones/" target="_blank">Definiciones</a>
+                                            <a href="https://redcontraelabusosexual.org/normatividad/" target="_blank">Normatividad</a>
+                                            <a href="https://redcontraelabusosexual.org/blog/" target="_blank">Blog</a>
+                                        </div>
+                                    </details>
+                                    <details>
+                                        <summary>Formación y Acción <i class="fa-solid fa-chevron-down"></i></summary>
+                                        <div class="sub-menu">
+                                            <a href="https://redcontraelabusosexual.org/gestion-social/" target="_blank">Gestión Social</a>
+                                            <a href="https://redcontraelabusosexual.org/talleres/" target="_blank">Solicitar un taller</a>
+                                        </div>
+                                    </details>
+                                    <details>
+                                        <summary>Lúdica y Confianza <i class="fa-solid fa-chevron-down"></i></summary>
+                                        <div class="sub-menu">
+                                            <a href="https://redcontraelabusosexual.org/ludica-y-confianza/" target="_blank">Material pedagógico</a>
+                                            <a href="https://redcontraelabusosexual.org/taller-de-yako-y-lila/" target="_blank">Taller de Yako y Lila</a>
+                                            <details>
+                                                <summary>Shows <i class="fa-solid fa-chevron-down"></i></summary>
+                                                <div class="sub-menu">
+                                                    <a href="https://redcontraelabusosexual.org/los-pequenos-valientes/" target="_blank">Los Pequeños Valientes</a>
+                                                    <a href="https://redcontraelabusosexual.org/lisi-y-los-pequenos-valientes-por-colombia/" target="_blank">Lisi por Colombia</a>
+                                                </div>
+                                            </details>
+                                        </div>
+                                    </details>
+                                    <details>
+                                        <summary>Mi Pijama Mi Escudo <i class="fa-solid fa-chevron-down"></i></summary>
+                                        <div class="sub-menu">
+                                            <a href="https://redcontraelabusosexual.org/mi-pijama-mi-escudo/" target="_blank">Proyecto</a>
+                                        </div>
+                                    </details>
+                                    <details>
+                                        <summary>Gestión en red <i class="fa-solid fa-chevron-down"></i></summary>
+                                        <div class="sub-menu">
+                                            <a href="https://redcontraelabusosexual.org/donaciones/" target="_blank">Donaciones</a>
+                                            <a href="https://redcontraelabusosexual.org/entrega-de-gafas/" target="_blank">Campaña Cuidamos tu mirada y tu corazón</a>
+                                            <a href="https://redcontraelabusosexual.org/solidaridad-ante-el-covid-19/" target="_blank">Solidaridad ante el Covid-19</a>
+                                            <a href="https://redcontraelabusosexual.org/voluntariado/" target="_blank">Voluntariado</a>
+                                        </div>
+                                    </details>
+                                </div>
+                            </details>
+
+                            <details>
+                                <summary>CLUB EVA <i class="fa-solid fa-chevron-down"></i></summary>
+                                <div class="sub-menu">
+                                    <a href="http://campus.fundacionred.org/my/courses.php" target="_blank">Campus EVA</a>
+                                    <a href="https://evaemprendedora.fundacionred.org/" target="_blank">EVA Emprendedora</a>
+                                </div>
+                            </details>
+
                             <a href="https://redcontraelabusosexual.org/taller-de-yako-y-lila/" target="_blank">TALLER DE YAKO Y LILA</a>
                             <a href="https://redcontraelabusosexual.org/contacto/" target="_blank">CONTÁCTENOS</a>
                         </nav>
