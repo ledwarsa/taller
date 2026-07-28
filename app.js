@@ -8,13 +8,79 @@ const App = {
                     <!-- Logo moved to bottom bar -->
                 </div>
                 <div class="menu-icons">
-                    <i class="fa-solid fa-shopping-cart"></i>
-                    <i class="fa-solid fa-bars"></i>
+                    <div class="cart-icon-wrapper" @click="isCartOpen = true">
+                        <i class="fa-solid fa-shopping-cart"></i>
+                        <span class="cart-badge" v-if="cartItemCount > 0">{{ cartItemCount }}</span>
+                    </div>
+                    <i class="fa-solid fa-bars" @click="isMenuOpen = true"></i>
                 </div>
             </header>
 
+            <transition name="slide-right">
+                <div class="side-cart" v-if="isCartOpen">
+                    <div class="menu-overlay" @click="isCartOpen = false"></div>
+                    <div class="menu-content cart-content-panel">
+                        <button class="btn-close-menu" @click="isCartOpen = false">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        <h2 class="cart-title">Tu Carrito</h2>
+                        
+                        <div v-if="cart.length === 0" class="empty-cart">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <p>Tu carrito está vacío</p>
+                        </div>
+                        
+                        <div v-else class="cart-items-container">
+                            <div class="cart-scroll-area">
+                                <div v-for="(item, index) in cart" :key="index" class="cart-item">
+                                    <img :src="item.product.image" class="cart-item-img">
+                                    <div class="cart-item-details">
+                                        <h4>{{ item.product.title }}</h4>
+                                        <p class="cart-item-price">\${{ item.product.price }}</p>
+                                        <div class="cart-item-options" v-if="Object.keys(item.options).length">
+                                            <span v-for="(val, key) in item.options" :key="key">{{key}}: {{val}}</span>
+                                        </div>
+                                        <div class="cart-qty">
+                                            <button @click="item.quantity > 1 ? item.quantity-- : removeFromCart(index)">-</button>
+                                            <span>{{ item.quantity }}</span>
+                                            <button @click="item.quantity++">+</button>
+                                        </div>
+                                    </div>
+                                    <button class="btn-remove-item" @click="removeFromCart(index)">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="cart-footer">
+                                <h3>Total: \${{ cartTotal }}</h3>
+                                <button class="btn-checkout" @click="goToCheckout">FINALIZAR COMPRA</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+
+            <transition name="slide-right">
+                <div class="side-menu" v-if="isMenuOpen">
+                    <div class="menu-overlay" @click="isMenuOpen = false"></div>
+                    <div class="menu-content">
+                        <button class="btn-close-menu" @click="isMenuOpen = false">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        <nav class="menu-nav">
+                            <a href="https://redcontraelabusosexual.org/" target="_blank">INICIO</a>
+                            <a href="https://redcontraelabusosexual.org/nosotros/" target="_blank">NOSOTROS</a>
+                            <a href="https://redcontraelabusosexual.org/lineas-de-accion/" target="_blank">LÍNEAS DE ACCIÓN</a>
+                            <a href="https://redcontraelabusosexual.org/club-eva/" target="_blank">CLUB EVA</a>
+                            <a href="https://redcontraelabusosexual.org/taller-de-yako-y-lila/" target="_blank">TALLER DE YAKO Y LILA</a>
+                            <a href="https://redcontraelabusosexual.org/contacto/" target="_blank">CONTÁCTENOS</a>
+                        </nav>
+                    </div>
+                </div>
+            </transition>
+
             <transition name="fade" mode="out-in">
-                <div class="grid-columns" v-if="!selectedProduct">
+                <div class="grid-columns" v-if="!selectedProduct && !isCheckout">
                 <div v-for="(col, index) in columns" 
                      :key="col.id"
                      class="column" 
@@ -86,7 +152,7 @@ const App = {
                                 </div>
 
                                 <div class="product-actions">
-                                    <button class="btn-buy-large" @click="buyProduct">🛒 COMPRAR AHORA</button>
+                                    <button class="btn-buy-large" @click="buyProduct">🛒 AÑADIR AL CARRITO</button>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +161,44 @@ const App = {
             </transition>
 
             <transition name="fade">
-                <footer class="bottom-bar" v-if="!selectedProduct">
+                <div class="checkout-container" v-if="isCheckout">
+                    <button class="btn-close" @click="closeCheckout">
+                        <i class="fa-solid fa-arrow-left"></i> Seguir comprando
+                    </button>
+                    <div class="checkout-content">
+                        <h2>Resumen de tu pedido</h2>
+                        
+                        <div class="checkout-items">
+                            <div v-for="(item, index) in cart" :key="index" class="checkout-item">
+                                <img :src="item.product.image" class="checkout-item-img">
+                                <div class="checkout-item-details">
+                                    <h4>{{ item.product.title }}</h4>
+                                    <div v-if="Object.keys(item.options).length">
+                                        <span v-for="(val, key) in item.options" :key="key">{{key}}: {{val}} </span>
+                                    </div>
+                                </div>
+                                <div class="checkout-item-qty">
+                                    x{{ item.quantity }}
+                                </div>
+                                <div class="checkout-item-price">
+                                    \${{ item.product.price }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="checkout-total">
+                            Total a pagar: <span>\${{ cartTotal }}</span>
+                        </div>
+                        
+                        <button class="btn-whatsapp" @click="payWithWhatsapp">
+                            <i class="fa-brands fa-whatsapp"></i> PAGAR POR WHATSAPP
+                        </button>
+                    </div>
+                </div>
+            </transition>
+
+            <transition name="fade">
+                <footer class="bottom-bar" v-if="!selectedProduct && !isCheckout">
                 <a href="#" class="discover-link">DESCUBRE MÁS</a>
                 <div class="center-brand">
                     <img src="./assets/logo.png" alt="Logo Taller de Yako y Lila" class="footer-logo">
@@ -123,6 +226,21 @@ const App = {
         const products = ref([]);
         const selectedProduct = ref(null);
         const selectedOptions = ref({});
+        const isMenuOpen = ref(false);
+        const isCartOpen = ref(false);
+        const isCheckout = ref(false);
+        const cart = ref([]);
+
+        const cartTotal = computed(() => {
+            return cart.value.reduce((total, item) => {
+                const price = parseFloat(item.product.price.replace(/\./g, ''));
+                return total + (price * item.quantity);
+            }, 0).toLocaleString('es-CO');
+        });
+
+        const cartItemCount = computed(() => {
+            return cart.value.reduce((count, item) => count + item.quantity, 0);
+        });
 
         // Auto-scroll logic
         const scrollRefs = ref([]);
@@ -259,7 +377,56 @@ const App = {
         };
 
         const buyProduct = () => {
-            alert('¡Producto añadido al carrito correctamente!');
+            const product = selectedProduct.value.data;
+            const options = { ...selectedOptions.value };
+            
+            const existingItem = cart.value.find(item => 
+                item.product.title === product.title && 
+                JSON.stringify(item.options) === JSON.stringify(options)
+            );
+
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.value.push({
+                    product: product,
+                    options: options,
+                    quantity: 1
+                });
+            }
+            
+            selectedProduct.value = null;
+            isCartOpen.value = true;
+        };
+
+        const removeFromCart = (index) => {
+            cart.value.splice(index, 1);
+        };
+
+        const goToCheckout = () => {
+            isCartOpen.value = false;
+            isCheckout.value = true;
+        };
+
+        const closeCheckout = () => {
+            isCheckout.value = false;
+        };
+
+        const payWithWhatsapp = () => {
+            let text = "Hola, me gustaría comprar lo siguiente:\n\n";
+            cart.value.forEach(item => {
+                text += `- ${item.quantity}x ${item.product.title}`;
+                if (Object.keys(item.options).length > 0) {
+                    const opts = Object.entries(item.options).map(([k, v]) => `${k}: ${v}`).join(', ');
+                    text += ` (${opts})`;
+                }
+                text += ` - $${item.product.price}\n`;
+            });
+            text += `\n*Total: $${cartTotal.value}*`;
+            
+            const encodedText = encodeURIComponent(text);
+            const phoneNumber = "573186266792";
+            window.open(`https://wa.me/${phoneNumber}?text=${encodedText}`, '_blank');
         };
 
         return {
@@ -276,7 +443,17 @@ const App = {
             resumeScroll,
             handleWheel,
             formatDescription,
-            selectedOptions
+            selectedOptions,
+            isMenuOpen,
+            isCartOpen,
+            cart,
+            cartTotal,
+            cartItemCount,
+            removeFromCart,
+            isCheckout,
+            goToCheckout,
+            closeCheckout,
+            payWithWhatsapp
         };
     }
 };
