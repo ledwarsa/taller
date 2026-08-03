@@ -3,7 +3,8 @@ import { createApp, ref, computed, onMounted } from 'https://unpkg.com/vue@3/dis
 const App = {
     template: `
         <div class="layout-container">
-            <header class="header">
+            <div class="hero-section" v-if="!isCategoryPage">
+                <header class="header">
                 <div class="logo-container">
                     <!-- Logo moved to bottom bar -->
                 </div>
@@ -156,6 +157,9 @@ const App = {
                     <div class="col-overlay"></div>
                     <div class="col-content">
                         <h2 class="col-title">{{ col.title }}</h2>
+                        <a :href="col.category === 'todos' ? 'index.html#full-catalog' : col.category + '.html'" class="hero-collection-btn">
+                            VER TODOS LOS PRODUCTOS <i class="fa-solid fa-arrow-right"></i>
+                        </a>
                     </div>
 
                     <!-- Products Modal / Flyout when active -->
@@ -286,7 +290,7 @@ const App = {
 
             <transition name="fade">
                 <footer class="bottom-bar" v-if="!selectedProduct && !isCheckout">
-                <a href="#" class="discover-link">DESCUBRE MÁS</a>
+                <a href="#full-catalog" class="discover-link" @click.prevent="scrollToCatalog">DESCUBRE MÁS</a>
                 <div class="center-brand">
                     <img src="./assets/logo.png" alt="Logo Taller de Yako y Lila" class="footer-logo">
                 </div>
@@ -299,6 +303,94 @@ const App = {
                 </div>
                 </footer>
             </transition>
+            </div> <!-- End hero-section -->
+
+            <!-- Internal Category Header -->
+            <header class="internal-header" v-if="isCategoryPage" :style="{ backgroundImage: 'url(./assets/' + isCategoryPage + '_bg.jpg)' }">
+                <div class="internal-overlay"></div>
+                <div class="logo-container" style="position: absolute; top: 20px; left: 20px; z-index: 10;">
+                    <a href="index.html"><img src="./assets/logo.png" alt="Logo" style="height: 60px;"></a>
+                </div>
+                <div class="header-center-content" style="position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; margin-top: -30px;">
+                    <h1 class="internal-title" style="margin: 0; margin-bottom: 15px;">{{ categoryTitle }}</h1>
+                    <a href="index.html" class="btn-back-home"><i class="fa-solid fa-arrow-left"></i> Volver al Inicio</a>
+                </div>
+            </header>
+
+            <!-- Full Catalog Section -->
+            <section id="full-catalog" class="catalog-section" v-show="!selectedProduct && !isCheckout">
+                <aside class="filters-sidebar">
+                    <div class="search-container" style="margin-bottom: 30px; position: relative;">
+                        <i class="fa-solid fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #9ca3af;"></i>
+                        <input type="text" v-model="searchQuery" placeholder="Buscar productos..." class="search-input" style="width: 100%; padding: 12px 15px 12px 40px; border-radius: 8px; border: 1px solid #d1d5db; background-color: white; font-family: var(--font-main); font-size: 1rem; color: #4b5563; outline: none; box-sizing: border-box;">
+                    </div>
+                    <h3>Categorías</h3>
+                    <div class="filter-list">
+                        <button class="filter-btn" :class="{ active: activeFilterCategory === 'todos' }" @click="handleCategoryClick('todos')">Todos los Productos</button>
+                        <button class="filter-btn" :class="{ active: activeFilterCategory === 'material' }" @click="handleCategoryClick('material')">Material Pedagógico</button>
+                        <button class="filter-btn" :class="{ active: activeFilterCategory === 'prendas' }" @click="handleCategoryClick('prendas')">Prendas de Vestir</button>
+                        <button class="filter-btn" :class="{ active: activeFilterCategory === 'marca' }" @click="handleCategoryClick('marca')">Productos de Marca</button>
+                        <div>
+                            <button class="filter-btn" :class="{ active: ['pijamas', 'Colección Los Pequeños Valientes', 'Colección Libre y Segura'].includes(activeFilterCategory) }" @click="handleCategoryClick('pijamas')" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                Pijamas
+                                <i class="fa-solid" :class="isPijamasOpen ? 'fa-chevron-up' : 'fa-chevron-down'" style="font-size: 0.8rem; opacity: 0.7;"></i>
+                            </button>
+                            <div v-show="isPijamasOpen" style="display: flex; flex-direction: column; margin-top: 5px; gap: 5px;">
+                                <button class="filter-btn sub-filter" :class="{ active: activeFilterCategory === 'Colección Los Pequeños Valientes' }" @click="handleSubcategoryClick('Colección Los Pequeños Valientes')" style="padding-left: 30px; font-size: 0.9rem;">- Los Pequeños Valientes</button>
+                                <button class="filter-btn sub-filter" :class="{ active: activeFilterCategory === 'Colección Libre y Segura' }" @click="handleSubcategoryClick('Colección Libre y Segura')" style="padding-left: 30px; font-size: 0.9rem;">- Libre y Segura</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin-top: 40px;">Precio</h3>
+                    <div class="filter-list">
+                        <select v-model="activePriceFilter" class="price-select" style="width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #d1d5db; background-color: white; font-family: var(--font-main); font-size: 1rem; font-weight: 600; color: #4b5563; outline: none; cursor: pointer;">
+                            <option value="todos">Todos los precios</option>
+                            <option value="hasta-50">Hasta $50.000</option>
+                            <option value="50-100">$50.000 - $100.000</option>
+                            <option value="mas-100">Más de $100.000</option>
+                        </select>
+                    </div>
+                </aside>
+                
+                <div class="products-grid">
+                    <div class="product-card" v-for="product in catalogFilteredProducts" :key="product.title" @click="selectProduct(product, { category: product.category, image: './assets/todos_bg2.jpg' })">
+                        <img :src="product.image" :alt="product.title" loading="lazy">
+                        <h3>{{ product.title }}</h3>
+                        <p class="price" v-if="product.price !== '0'">\${{ product.price }}</p>
+                        <button class="btn-buy">VER MÁS</button>
+                    </div>
+                    <div class="no-products" v-if="catalogFilteredProducts.length === 0">
+                        Próximamente
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Global Footer -->
+            <footer class="global-footer" v-show="!selectedProduct && !isCheckout">
+                <div class="footer-content">
+                    <img src="./assets/logo-site-blanco.png" alt="Fundación Red" class="footer-main-logo">
+                    
+                    <div class="footer-info">
+                        <p><strong>Dirección:</strong> Calle 127B # 50A-01 Tierra Linda.</p>
+                        <p><strong>Celular:</strong> +57 318 6266792</p>
+                        <p><strong>Correo:</strong> contactenos@redcontraelabusosexual.org</p>
+                        <p><a href="https://redcontraelabusosexual.org/politica-de-proteccion-de-datos/" target="_blank" class="footer-policy">Política de Protección de datos</a></p>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom-bar">
+                    <p>© Fundación Red Todos los derechos reservados 2026 | Diseñado IconoVirtual</p>
+                </div>
+
+                <a href="https://redcontraelabusosexual.org/donaciones/" target="_blank" class="floating-donate">
+                    <img src="./assets/BOTON-DONACIONES.png" alt="Donar Ahora">
+                </a>
+                
+                <a href="http://wa.link/hvynr5" target="_blank" class="floating-whatsapp">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </a>
+            </footer>
         </div>
     `,
     setup() {
@@ -319,6 +411,54 @@ const App = {
         const isCartOpen = ref(false);
         const isCheckout = ref(false);
         const cart = ref([]);
+        const isCategoryPage = window.categoryPage || null;
+        const activeFilterCategory = ref(isCategoryPage || 'todos');
+        const activePriceFilter = ref('todos');
+        const isPijamasOpen = ref(false);
+        const searchQuery = ref('');
+
+        const categoryTitle = computed(() => {
+            if (!isCategoryPage) return '';
+            const titles = {
+                'material': 'Material Pedagógico',
+                'prendas': 'Prendas de Vestir',
+                'marca': 'Productos de Marca',
+                'pijamas': 'Pijamas'
+            };
+            return titles[isCategoryPage] || '';
+        });
+
+        const handleCategoryClick = (cat) => {
+            if (isCategoryPage) {
+                if (cat === 'todos') window.location.href = 'index.html#full-catalog';
+                else window.location.href = cat + '.html';
+            } else {
+                activeFilterCategory.value = cat;
+                if (cat === 'pijamas') isPijamasOpen.value = !isPijamasOpen.value;
+            }
+        };
+
+        const handleSubcategoryClick = (subcat) => {
+            if (isCategoryPage && isCategoryPage !== 'pijamas') {
+                window.location.href = 'pijamas.html?subcat=' + encodeURIComponent(subcat);
+            } else {
+                activeFilterCategory.value = subcat;
+            }
+        };
+
+        const navigateToCategory = (cat) => {
+            if (cat === 'todos') window.location.href = 'index.html#full-catalog';
+            else window.location.href = cat + '.html';
+        };
+
+        if (isCategoryPage === 'pijamas') {
+            const urlParams = new URLSearchParams(window.location.search);
+            const subcat = urlParams.get('subcat');
+            if (subcat) {
+                activeFilterCategory.value = subcat;
+                isPijamasOpen.value = true;
+            }
+        }
 
         const cartTotal = computed(() => {
             return cart.value.reduce((total, item) => {
@@ -537,6 +677,43 @@ const App = {
             window.open(`https://wa.me/${phoneNumber}?text=${encodedText}`, '_blank');
         };
 
+        const scrollToCatalog = () => {
+            const el = document.getElementById('full-catalog');
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+
+        const catalogFilteredProducts = computed(() => {
+            let list = [];
+            if (activeFilterCategory.value === 'Colección Los Pequeños Valientes' || activeFilterCategory.value === 'Colección Libre y Segura') {
+                list = products.value.filter(p => p.subcategory === activeFilterCategory.value);
+            } else {
+                list = categoryProductsList.value[activeFilterCategory.value] || [];
+            }
+            
+            // Filter by price
+            if (activePriceFilter.value !== 'todos') {
+                list = list.filter(p => {
+                    if (p.price === '0') return false; // Ignore subcategory headers for price filtering
+                    const priceNum = parseFloat(p.price.replace(/\./g, ''));
+                    if (activePriceFilter.value === 'hasta-50') return priceNum <= 50000;
+                    if (activePriceFilter.value === '50-100') return priceNum > 50000 && priceNum <= 100000;
+                    if (activePriceFilter.value === 'mas-100') return priceNum > 100000;
+                    return true;
+                });
+            }
+
+            // Filter by search query
+            if (searchQuery.value.trim() !== '') {
+                const query = searchQuery.value.toLowerCase();
+                list = list.filter(p => p.title.toLowerCase().includes(query) || (p.description && p.description.toLowerCase().includes(query)));
+            }
+
+            // Remove subcategory header items (price '0') from the grid
+            return list.filter(p => p.price !== '0');
+        });
+
         return {
             columns,
             activeCol,
@@ -562,7 +739,18 @@ const App = {
             isCheckout,
             goToCheckout,
             closeCheckout,
-            payWithWhatsapp
+            payWithWhatsapp,
+            activeFilterCategory,
+            activePriceFilter,
+            isPijamasOpen,
+            searchQuery,
+            catalogFilteredProducts,
+            scrollToCatalog,
+            isCategoryPage,
+            categoryTitle,
+            handleCategoryClick,
+            handleSubcategoryClick,
+            navigateToCategory
         };
     }
 };
