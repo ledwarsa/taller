@@ -324,25 +324,27 @@ const App = {
                         <i class="fa-solid fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #9ca3af;"></i>
                         <input type="text" v-model="searchQuery" placeholder="Buscar productos..." class="search-input" style="width: 100%; padding: 12px 15px 12px 40px; border-radius: 8px; border: 1px solid #d1d5db; background-color: white; font-family: var(--font-main); font-size: 1rem; color: #4b5563; outline: none; box-sizing: border-box;">
                     </div>
-                    <h3>Categorías</h3>
-                    <div class="filter-list">
-                        <button class="filter-btn" :class="{ active: activeFilterCategory === 'todos' }" @click="handleCategoryClick('todos')">Todos los Productos</button>
-                        <button class="filter-btn" :class="{ active: activeFilterCategory === 'material' }" @click="handleCategoryClick('material')">Material Pedagógico</button>
-                        <button class="filter-btn" :class="{ active: activeFilterCategory === 'prendas' }" @click="handleCategoryClick('prendas')">Prendas de Vestir</button>
-                        <button class="filter-btn" :class="{ active: activeFilterCategory === 'marca' }" @click="handleCategoryClick('marca')">Productos de Marca</button>
-                        <div>
-                            <button class="filter-btn" :class="{ active: ['pijamas', 'Colección Los Pequeños Valientes', 'Colección Libre y Segura'].includes(activeFilterCategory) }" @click="handleCategoryClick('pijamas')" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                Pijamas
-                                <i class="fa-solid" :class="isPijamasOpen ? 'fa-chevron-up' : 'fa-chevron-down'" style="font-size: 0.8rem; opacity: 0.7;"></i>
-                            </button>
-                            <div v-show="isPijamasOpen" style="display: flex; flex-direction: column; margin-top: 5px; gap: 5px;">
-                                <button class="filter-btn sub-filter" :class="{ active: activeFilterCategory === 'Colección Los Pequeños Valientes' }" @click="handleSubcategoryClick('Colección Los Pequeños Valientes')" style="padding-left: 30px; font-size: 0.9rem;">- Los Pequeños Valientes</button>
-                                <button class="filter-btn sub-filter" :class="{ active: activeFilterCategory === 'Colección Libre y Segura' }" @click="handleSubcategoryClick('Colección Libre y Segura')" style="padding-left: 30px; font-size: 0.9rem;">- Libre y Segura</button>
+                    <template v-if="!isCategoryPage">
+                        <h3>Categorías</h3>
+                        <div class="filter-list">
+                            <button class="filter-btn" :class="{ active: activeFilterCategory === 'todos' }" @click="handleCategoryClick('todos')">Todos los Productos</button>
+                            <button class="filter-btn" :class="{ active: activeFilterCategory === 'material' }" @click="handleCategoryClick('material')">Material Pedagógico</button>
+                            <button class="filter-btn" :class="{ active: activeFilterCategory === 'prendas' }" @click="handleCategoryClick('prendas')">Prendas de Vestir</button>
+                            <button class="filter-btn" :class="{ active: activeFilterCategory === 'marca' }" @click="handleCategoryClick('marca')">Productos de Marca</button>
+                            <div>
+                                <button class="filter-btn" :class="{ active: ['pijamas', 'Colección Los Pequeños Valientes', 'Colección Libre y Segura'].includes(activeFilterCategory) }" @click="handleCategoryClick('pijamas')" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                    Pijamas
+                                    <i class="fa-solid" :class="isPijamasOpen ? 'fa-chevron-up' : 'fa-chevron-down'" style="font-size: 0.8rem; opacity: 0.7;"></i>
+                                </button>
+                                <div v-show="isPijamasOpen" style="display: flex; flex-direction: column; margin-top: 5px; gap: 5px;">
+                                    <button class="filter-btn sub-filter" :class="{ active: activeFilterCategory === 'Colección Los Pequeños Valientes' }" @click="handleSubcategoryClick('Colección Los Pequeños Valientes')" style="padding-left: 30px; font-size: 0.9rem;">- Los Pequeños Valientes</button>
+                                    <button class="filter-btn sub-filter" :class="{ active: activeFilterCategory === 'Colección Libre y Segura' }" @click="handleSubcategoryClick('Colección Libre y Segura')" style="padding-left: 30px; font-size: 0.9rem;">- Libre y Segura</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </template>
                     
-                    <h3 style="margin-top: 40px;">Precio</h3>
+                    <h3 :style="{ marginTop: isCategoryPage ? '0' : '40px' }">Precio</h3>
                     <div class="filter-list">
                         <select v-model="activePriceFilter" class="price-select" style="width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #d1d5db; background-color: white; font-family: var(--font-main); font-size: 1rem; font-weight: 600; color: #4b5563; outline: none; cursor: pointer;">
                             <option value="todos">Todos los precios</option>
