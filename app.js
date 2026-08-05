@@ -3,20 +3,6 @@ import { createApp, ref, computed, onMounted } from 'https://unpkg.com/vue@3/dis
 const App = {
     template: `
         <div class="layout-container">
-            <div class="hero-section" v-if="!isCategoryPage">
-                <header class="header">
-                <div class="logo-container">
-                    <!-- Logo moved to bottom bar -->
-                </div>
-                <div class="menu-icons">
-                    <div class="cart-icon-wrapper" @click="isCartOpen = true">
-                        <i class="fa-solid fa-shopping-cart"></i>
-                        <span class="cart-badge" v-if="cartItemCount > 0">{{ cartItemCount }}</span>
-                    </div>
-                    <i class="fa-solid fa-bars" @click="isMenuOpen = true"></i>
-                </div>
-            </header>
-
             <transition name="slide-right">
                 <div class="side-cart" v-if="isCartOpen">
                     <div class="menu-overlay" @click="isCartOpen = false"></div>
@@ -143,6 +129,20 @@ const App = {
                     </div>
                 </div>
             </transition>
+            <div class="hero-section" v-if="!isCategoryPage">
+                <header class="header">
+                <div class="logo-container">
+                    <!-- Logo moved to bottom bar -->
+                </div>
+                <div class="menu-icons">
+                    <div class="cart-icon-wrapper" @click="isCartOpen = true">
+                        <i class="fa-solid fa-shopping-cart"></i>
+                        <span class="cart-badge" v-if="cartItemCount > 0">{{ cartItemCount }}</span>
+                    </div>
+                    <i class="fa-solid fa-bars" @click="isMenuOpen = true"></i>
+                </div>
+            </header>
+
 
             <transition name="fade" mode="out-in">
                 <div class="grid-columns" v-if="!selectedProduct && !isCheckout">
@@ -209,6 +209,26 @@ const App = {
                 </div>
             </transition>
 
+            <transition name="fade">
+                <footer class="bottom-bar" v-if="!selectedProduct && !isCheckout">
+                <a href="#full-catalog" class="discover-link" @click.prevent="scrollToCatalog">
+                    DESCUBRE MÁS <i class="fa-solid fa-chevron-down bounce-arrow"></i>
+                </a>
+                <div class="center-brand">
+                    <img src="./assets/logo.png" alt="Logo Taller de Yako y Lila" class="footer-logo">
+                </div>
+                <div class="slider-controls">
+                    <span class="slide-num">01</span>
+                    <div class="progress-bar"><div class="progress-fill" :style="{ width: ((activeCol !== null ? activeCol + 1 : 1) * 20) + '%' }"></div></div>
+                    <span class="slide-num">05</span>
+                    <button class="nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="nav-btn"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                </footer>
+            </transition>
+            </div> <!-- End hero-section -->
+
+            <!-- Global Modals -->
             <transition name="slide-up">
                 <div class="product-view-container" v-if="selectedProduct" :style="{ backgroundImage: 'url(\\'' + selectedProduct.column.image + '\\')' }">
                     <div class="product-view-overlay"></div>
@@ -217,13 +237,31 @@ const App = {
                     </button>
                     <div class="product-view-content">
                         <div class="product-image-side">
-                            <img :src="selectedProduct.data.image" :alt="selectedProduct.data.title">
+                            <img :src="activeImage || selectedProduct.data.image" :alt="selectedProduct.data.title" class="main-product-image">
+                            
+                            <!-- Thumbnail Gallery -->
+                            <div class="product-gallery" v-if="selectedProduct.data.gallery && selectedProduct.data.gallery.length > 0">
+                                <img 
+                                    :src="selectedProduct.data.image" 
+                                    class="gallery-thumbnail" 
+                                    :class="{ 'active': (activeImage || selectedProduct.data.image) === selectedProduct.data.image }"
+                                    @click="activeImage = selectedProduct.data.image"
+                                >
+                                <img 
+                                    v-for="img in selectedProduct.data.gallery" 
+                                    :key="img" 
+                                    :src="img" 
+                                    class="gallery-thumbnail"
+                                    :class="{ 'active': activeImage === img }"
+                                    @click="activeImage = img"
+                                >
+                            </div>
                         </div>
                         <div class="product-details-side">
                             <div class="glass-panel">
                                 <h2>{{ selectedProduct.data.title }}</h2>
                                 <p class="product-price">\${{ selectedProduct.data.price }}</p>
-                                <p class="product-desc" v-html="formatDescription(selectedProduct.data.description)"></p>
+                                <p class="product-desc" v-if="selectedProduct.data.description" v-html="formatDescription(selectedProduct.data.description)"></p>
                                 
                                 <div v-if="selectedProduct.data.options && selectedProduct.data.options.length > 0" class="product-options" style="margin-bottom: 25px;">
                                     <div v-for="opt in selectedProduct.data.options" :key="opt.name" style="margin-bottom: 20px;">
@@ -288,23 +326,6 @@ const App = {
                 </div>
             </transition>
 
-            <transition name="fade">
-                <footer class="bottom-bar" v-if="!selectedProduct && !isCheckout">
-                <a href="#full-catalog" class="discover-link" @click.prevent="scrollToCatalog">DESCUBRE MÁS</a>
-                <div class="center-brand">
-                    <img src="./assets/logo.png" alt="Logo Taller de Yako y Lila" class="footer-logo">
-                </div>
-                <div class="slider-controls">
-                    <span class="slide-num">01</span>
-                    <div class="progress-bar"><div class="progress-fill" :style="{ width: ((activeCol !== null ? activeCol + 1 : 1) * 20) + '%' }"></div></div>
-                    <span class="slide-num">05</span>
-                    <button class="nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
-                    <button class="nav-btn"><i class="fa-solid fa-chevron-right"></i></button>
-                </div>
-                </footer>
-            </transition>
-            </div> <!-- End hero-section -->
-
             <!-- Internal Category Header -->
             <header class="internal-header" v-if="isCategoryPage" :style="{ backgroundImage: 'url(./assets/' + isCategoryPage + '_bg.jpg)' }">
                 <div class="internal-overlay"></div>
@@ -315,7 +336,20 @@ const App = {
                     <h1 class="internal-title" style="margin: 0; margin-bottom: 15px;">{{ categoryTitle }}</h1>
                     <a href="index.html" class="btn-back-home"><i class="fa-solid fa-arrow-left"></i> Volver al Inicio</a>
                 </div>
+                <div class="menu-icons" style="position: absolute; top: 20px; right: 20px; z-index: 10; display: flex; gap: 20px; color: white; font-size: 1.5rem;">
+                    <div class="cart-icon-wrapper" @click="isCartOpen = true" style="cursor: pointer; position: relative;">
+                        <i class="fa-solid fa-shopping-cart" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);"></i>
+                        <span class="cart-badge" v-if="cartItemCount > 0">{{ cartItemCount }}</span>
+                    </div>
+                </div>
             </header>
+
+            <!-- Category Description Block -->
+            <section class="category-description" v-if="isCategoryPage && categoryDescription && !selectedProduct && !isCheckout">
+                <div class="description-card">
+                    <div class="category-text" v-html="categoryDescription"></div>
+                </div>
+            </section>
 
             <!-- Full Catalog Section -->
             <section id="full-catalog" class="catalog-section" v-show="!selectedProduct && !isCheckout">
@@ -363,7 +397,7 @@ const App = {
                         <button class="btn-buy">VER MÁS</button>
                     </div>
                     <div class="no-products" v-if="catalogFilteredProducts.length === 0">
-                        Próximamente
+                        Próximamente (Categoría: {{ activeFilterCategory }}, Total: {{ products ? products.length : 0 }})
                     </div>
                 </div>
             </section>
@@ -408,6 +442,7 @@ const App = {
         const activeSubcategory = ref(null);
         const products = ref([]);
         const selectedProduct = ref(null);
+        const activeImage = ref('');
         const selectedOptions = ref({});
         const isMenuOpen = ref(false);
         const isCartOpen = ref(false);
@@ -428,6 +463,17 @@ const App = {
                 'pijamas': 'Pijamas'
             };
             return titles[isCategoryPage] || '';
+        });
+
+        const categoryDescription = computed(() => {
+            if (!isCategoryPage) return '';
+            const descriptions = {
+                'material': '<p>Yako y Lila, los dos personajes principales de nuestro cuento “Los Pequeños Valientes”, ¡han creado su propio taller de herramientas! Aquí, ellos han diseñado diferentes juegos y herramientas pedagógicas que ayudarán a otros niños, niñas y adolescentes (NNA) a prevenir, detectar y denunciar el abuso sexual infantil (ASI).</p><p>Estas herramientas están diseñadas para usarse bajo la supervisión y guía de los adultos responsables, es decir, los papás y las mamás, para que todos puedan aprender en familia de forma divertida.</p>',
+                'prendas': '<p>En la Fundación Red, sabemos que los niños, niñas y adolescentes (NNA) necesitan herramientas divertidas y útiles para aprender.</p><p>Por eso, con la creación de hoodies y camisetas, tenemos una herramienta de comunicación visual al mismo tiempo que plasmamos un mensaje contundente: la prevención comienza desde la protección del espacio personal.</p>',
+                'marca': '<p>Con estos productos queremos estar presentes y acompañarte en tu día a dia. Cuando te tomes un café o quieras escribir tus pensamientos e ideas inspiradoras...</p><p>Yako, Lila, o Lisi te recordarán la importancia de ser valientes con nuestros mugs y lapiceros que representan nuestro compromiso a cuidar a los niños, niñas y adolescentes.</p>',
+                'pijamas': '<p>En esta campaña las pijamas simbolizan un escudo protector. La pijama es diseñada tipo onesie, o en otras palabras, una sola pieza o enterizo.</p><p>De esta manera, creamos una analogía donde la protección hacia el cuerpo debe ser total, así como el espacio físico que cubre la prenda, es decir, el cuerpo entero. Constituye un símbolo de empoderamiento a través del mensaje de autoprotección y autocuidado que lleva.</p>'
+            };
+            return descriptions[isCategoryPage] || '';
         });
 
         const handleCategoryClick = (cat) => {
@@ -572,7 +618,12 @@ const App = {
                 if (cat === 'todos') {
                     result = [...products.value];
                 } else {
-                    result = products.value.filter(p => p.category === cat);
+                    result = products.value.filter(p => {
+                        if (Array.isArray(p.category)) {
+                            return p.category.includes(cat);
+                        }
+                        return p.category === cat;
+                    });
                     if (result.length === 0) {
                         result = products.value.filter(p => {
                             const title = p.title.toLowerCase();
@@ -609,8 +660,8 @@ const App = {
                 return;
             }
             selectedProduct.value = { data: product, column: col };
-            
-            // Initialize default selections (first option of each)
+            activeImage.value = product.image;
+            selectedOptions.value = {};          // Initialize default selections (first option of each)
             const initialOpts = {};
             if (product.options) {
                 product.options.forEach(opt => {
@@ -694,10 +745,12 @@ const App = {
                 list = categoryProductsList.value[activeFilterCategory.value] || [];
             }
             
+            // Filter out subcategory headers
+            list = list.filter(p => p.price !== '0');
+
             // Filter by price
             if (activePriceFilter.value !== 'todos') {
                 list = list.filter(p => {
-                    if (p.price === '0') return false; // Ignore subcategory headers for price filtering
                     const priceNum = parseFloat(p.price.replace(/\./g, ''));
                     if (activePriceFilter.value === 'hasta-50') return priceNum <= 50000;
                     if (activePriceFilter.value === '50-100') return priceNum > 50000 && priceNum <= 100000;
@@ -723,6 +776,7 @@ const App = {
             products,
             categoryProductsList,
             selectedProduct,
+            activeImage,
             selectProduct,
             closeProduct,
             buyProduct,
@@ -750,6 +804,7 @@ const App = {
             scrollToCatalog,
             isCategoryPage,
             categoryTitle,
+            categoryDescription,
             handleCategoryClick,
             handleSubcategoryClick,
             navigateToCategory

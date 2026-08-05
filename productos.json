@@ -1,5 +1,20 @@
 [
   {
+    "title": "Gorra infantil",
+    "price": "28.000",
+    "image": "assets/gorras/principal.png",
+    "description": "",
+    "options": [],
+    "url": "",
+    "category": "prendas",
+    "gallery": [
+      "assets/gorras/50.png",
+      "assets/gorras/51.png",
+      "assets/gorras/52.png",
+      "assets/gorras/53.png"
+    ]
+  },
+  {
     "title": "Combo Acción y Prevención",
     "price": "115.000",
     "image": "productos/42-ajus.png",

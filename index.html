@@ -10,8 +10,8 @@
     <link rel="preload" href="./assets/prendas_bg.jpg" as="image" fetchpriority="high">
     <link rel="preload" href="./assets/marca_bg.jpg" as="image" fetchpriority="high">
     <link rel="preload" href="./assets/todos_bg2.jpg" as="image" fetchpriority="high">
-    <link rel="stylesheet" href="./style.css?v=27">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css?v=115">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script type="importmap">
@@ -23,16 +23,27 @@
     </script>
 </head>
 <body>
-    <div id="error-log" style="color:red; background:white; position:absolute; z-index:9999; top:0; left:0; width:100%; white-space:pre-wrap;"></div>
+    <div id="error-log" style="color:red; background:white; position:absolute; z-index:9999; top:0; left:0; width:100%; white-space:pre-wrap; display:none;"></div>
+    <!-- Add error logging script -->
     <script>
-      window.addEventListener('error', function(e) {
-        document.getElementById('error-log').innerText += e.message + ' at ' + e.filename + ':' + e.lineno + '\n';
-      });
-      window.addEventListener('unhandledrejection', function(e) {
-        document.getElementById('error-log').innerText += e.reason + '\n';
+      window.onerror = function(msg, url, lineNo, columnNo, error) {
+        const errorDiv = document.getElementById('error-log');
+        if (errorDiv) {
+          errorDiv.style.display = 'block';
+          errorDiv.innerHTML += `<p>Error: ${msg}<br>Script: ${url}<br>Line: ${lineNo}</p>`;
+        }
+        return false;
+      };
+      
+      window.addEventListener('unhandledrejection', function(event) {
+        const errorDiv = document.getElementById('error-log');
+        if (errorDiv) {
+          errorDiv.style.display = 'block';
+          errorDiv.innerHTML += `<p>Promise Error: ${event.reason}</p>`;
+        }
       });
     </script>
     <div id="app"></div>
-    <script type="module" src="./app.js?v=28"></script>
+    <script type="module" src="./app.js?v=32"></script>
 </body>
 </html>
