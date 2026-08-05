@@ -1,5 +1,65 @@
 [
   {
+    "title": "Mug Show de Titeres",
+    "price": "",
+    "image": "assets/vaso_show/Principal.png",
+    "description": "",
+    "options": [],
+    "url": "",
+    "category": "marca",
+    "gallery": [
+      "assets/vaso_show/60.png",
+      "assets/vaso_show/62.png",
+      "assets/vaso_show/65.png",
+      "assets/vaso_show/66.png"
+    ]
+  },
+  {
+    "title": "Mug Yako y Lila",
+    "price": "",
+    "image": "assets/vaso_yako_y_lila/principal.png",
+    "description": "",
+    "options": [],
+    "url": "",
+    "category": "marca",
+    "gallery": [
+      "assets/vaso_yako_y_lila/61.png",
+      "assets/vaso_yako_y_lila/63.png",
+      "assets/vaso_yako_y_lila/67.png",
+      "assets/vaso_yako_y_lila/68.png",
+      "assets/vaso_yako_y_lila/69.png"
+    ]
+  },
+  {
+    "title": "Mug Club EVA",
+    "price": "",
+    "image": "assets/vaso_eva/principal.png",
+    "description": "",
+    "options": [],
+    "url": "",
+    "category": "marca",
+    "gallery": [
+      "assets/vaso_eva/56.png",
+      "assets/vaso_eva/57.png",
+      "assets/vaso_eva/70.png"
+    ]
+  },
+  {
+    "title": "Termo Club Eva",
+    "price": "",
+    "image": "assets/termos/principal.png",
+    "description": "",
+    "options": [],
+    "url": "",
+    "category": "marca",
+    "gallery": [
+      "assets/termos/43.png",
+      "assets/termos/45.png",
+      "assets/termos/46.png",
+      "assets/termos/47.png"
+    ]
+  },
+  {
     "title": "Gorra infantil",
     "price": "28.000",
     "image": "assets/gorras/principal.png",

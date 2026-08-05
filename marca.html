@@ -14,23 +14,8 @@
           "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
         }
       }
-    <script>
-      function loadMobileStyles() {
-        if (window.innerWidth <= 768 || /Mobi|Android/i.test(navigator.userAgent)) {
-          if (!document.querySelector('link[href^="./mobile.css"]')) {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = './mobile.css?v=2';
-            document.head.appendChild(link);
-          }
-        } else {
-          const existing = document.querySelector('link[href^="./mobile.css"]');
-          if (existing) existing.remove();
-        }
-      }
-      loadMobileStyles();
-      window.addEventListener('resize', loadMobileStyles);
     </script>
+    <link rel="stylesheet" media="screen and (max-width: 768px)" href="./mobile.css?v=3">
 </head>
 <body>
     <div id="error-log" style="color:red; background:white; position:absolute; z-index:9999; top:0; left:0; width:100%; white-space:pre-wrap;"></div>
@@ -44,6 +29,6 @@
       window.categoryPage = 'marca';
     </script>
     <div id="app"></div>
-    <script type="module" src="./app.js?v=32"></script>
+    <script type="module" src="./app.js?v=33"></script>
 </body>
 </html>

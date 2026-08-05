@@ -23,7 +23,7 @@ const App = {
                                     <img :src="item.product.image" class="cart-item-img">
                                     <div class="cart-item-details">
                                         <h4>{{ item.product.title }}</h4>
-                                        <p class="cart-item-price">\${{ item.product.price }}</p>
+                                        <p class="cart-item-price">{{ item.product.price ? '$' + item.product.price : 'Consultar' }}</p>
                                         <div class="cart-item-options" v-if="Object.keys(item.options).length">
                                             <span v-for="(val, key) in item.options" :key="key">{{key}}: {{val}}</span>
                                         </div>
@@ -176,7 +176,7 @@ const App = {
                                 <div class="product-card" v-for="product in (categoryProductsList[col.category] || [])" :key="product.title" @click="selectProduct(product, col)">
                                     <img :src="product.image" :alt="product.title" loading="lazy">
                                     <h3>{{ product.title }}</h3>
-                                    <p class="price">\${{ product.price }}</p>
+                                    <p class="price">{{ product.price ? '$' + product.price : 'Consultar' }}</p>
                                     <button class="btn-buy">VER MÁS</button>
                                 </div>
                                 <div class="no-products" v-if="(categoryProductsList[col.category] || []).length === 0">
@@ -198,7 +198,7 @@ const App = {
                                     <div class="product-card" v-for="product in (categoryProductsList[col.category] || []).filter(p => p.subcategory === activeSubcategory)" :key="product.title" @click="selectProduct(product, col)">
                                         <img :src="product.image" :alt="product.title" loading="lazy">
                                         <h3>{{ product.title }}</h3>
-                                        <p class="price">\${{ product.price }}</p>
+                                        <p class="price">{{ product.price ? '$' + product.price : 'Consultar' }}</p>
                                         <button class="btn-buy">VER MÁS</button>
                                     </div>
                                 </template>
@@ -260,7 +260,7 @@ const App = {
                         <div class="product-details-side">
                             <div class="glass-panel">
                                 <h2>{{ selectedProduct.data.title }}</h2>
-                                <p class="product-price">\${{ selectedProduct.data.price }}</p>
+                                <p class="product-price">{{ selectedProduct.data.price ? '$' + selectedProduct.data.price : 'Consultar' }}</p>
                                 <p class="product-desc" v-if="selectedProduct.data.description" v-html="formatDescription(selectedProduct.data.description)"></p>
                                 
                                 <div v-if="selectedProduct.data.options && selectedProduct.data.options.length > 0" class="product-options" style="margin-bottom: 25px;">
@@ -310,7 +310,7 @@ const App = {
                                     x{{ item.quantity }}
                                 </div>
                                 <div class="checkout-item-price">
-                                    \${{ item.product.price }}
+                                    {{ item.product.price ? '$' + item.product.price : 'Consultar' }}
                                 </div>
                             </div>
                         </div>
@@ -393,7 +393,7 @@ const App = {
                     <div class="product-card" v-for="product in catalogFilteredProducts" :key="product.title" @click="selectProduct(product, { category: product.category, image: './assets/todos_bg2.jpg' })">
                         <img :src="product.image" :alt="product.title" loading="lazy">
                         <h3>{{ product.title }}</h3>
-                        <p class="price" v-if="product.price !== '0'">\${{ product.price }}</p>
+                        <p class="price" v-if="product.price !== '0'">{{ product.price ? '$' + product.price : 'Consultar' }}</p>
                         <button class="btn-buy">VER MÁS</button>
                     </div>
                     <div class="no-products" v-if="catalogFilteredProducts.length === 0">
@@ -510,7 +510,8 @@ const App = {
 
         const cartTotal = computed(() => {
             return cart.value.reduce((total, item) => {
-                const price = parseFloat(item.product.price.replace(/\./g, ''));
+                const priceStr = item.product.price || "0";
+                const price = parseFloat(priceStr.replace(/\./g, ''));
                 return total + (price * item.quantity);
             }, 0).toLocaleString('es-CO');
         });
@@ -721,7 +722,7 @@ const App = {
                     const opts = Object.entries(item.options).map(([k, v]) => `${k}: ${v}`).join(', ');
                     text += ` (${opts})`;
                 }
-                text += ` - $${item.product.price}\n`;
+                text += ` - ${item.product.price ? '$' + item.product.price : 'Consultar'}\n`;
             });
             text += `\n*Total: $${cartTotal.value}*`;
             
@@ -751,6 +752,7 @@ const App = {
             // Filter by price
             if (activePriceFilter.value !== 'todos') {
                 list = list.filter(p => {
+                    if (!p.price) return true; // Show items without price
                     const priceNum = parseFloat(p.price.replace(/\./g, ''));
                     if (activePriceFilter.value === 'hasta-50') return priceNum <= 50000;
                     if (activePriceFilter.value === '50-100') return priceNum > 50000 && priceNum <= 100000;
