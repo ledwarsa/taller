@@ -20,6 +20,22 @@
           "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
         }
       }
+    <script>
+      function loadMobileStyles() {
+        if (window.innerWidth <= 768 || /Mobi|Android/i.test(navigator.userAgent)) {
+          if (!document.querySelector('link[href^="./mobile.css"]')) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = './mobile.css?v=2';
+            document.head.appendChild(link);
+          }
+        } else {
+          const existing = document.querySelector('link[href^="./mobile.css"]');
+          if (existing) existing.remove();
+        }
+      }
+      loadMobileStyles();
+      window.addEventListener('resize', loadMobileStyles);
     </script>
 </head>
 <body>

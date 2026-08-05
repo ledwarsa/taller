@@ -1,0 +1,237 @@
+/* mobile.css - Exclusive styles for mobile devices */
+
+.hero-section {
+    height: auto !important;
+    min-height: 100vh;
+    overflow: visible !important;
+}
+
+/* Stack columns vertically */
+.grid-columns {
+    flex-direction: column;
+    height: auto !important;
+}
+
+/* Adjust column height distribution */
+.column {
+    flex: none !important;
+    height: 350px !important;
+    width: 100% !important;
+    transition: height 0.5s ease;
+}
+
+.column.active {
+    flex: none !important;
+    height: 550px !important; /* Expanded height */
+    width: 100% !important;
+}
+
+/* Header adjustments */
+.header {
+    padding: 15px 20px;
+    position: absolute !important; /* Keep header floating at top of hero */
+    width: 100%;
+}
+
+.bottom-bar {
+    height: auto !important;
+    min-height: 80px;
+    padding: 15px !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+.bottom-bar .center-brand img {
+    height: 50px !important; /* Smaller logo in footer */
+}
+
+.discover-link {
+    font-size: 0.85rem !important;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.bounce-arrow {
+    margin-left: 5px;
+}
+
+/* Column titles */
+.col-title {
+    font-size: 1.5rem !important;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+/* Adjust title position */
+.col-content {
+    bottom: 40px !important;
+}
+
+.column.active .col-content {
+    transform: translateY(-240px) !important;
+}
+
+/* Products Flyout */
+.products-flyout {
+    height: 220px !important; /* Shorter for mobile */
+    padding: 15px 10px !important;
+}
+
+.products-flyout.show {
+    bottom: 20px !important; /* Inside the column, below the title */
+}
+
+/* Product Cards */
+.product-card {
+    min-width: 140px; /* Smaller cards */
+    width: 140px;
+    padding: 12px;
+    gap: 8px;
+}
+
+.product-card img {
+    height: 90px;
+}
+
+.product-card h3 {
+    font-size: 0.8rem;
+}
+
+.product-card .price {
+    font-size: 0.9rem;
+    margin-top: auto;
+}
+
+.btn-buy {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+}
+
+/* Global Modals for Mobile */
+.product-view-container {
+    padding: 0;
+}
+
+.product-view-content {
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+    overflow-y: auto;
+}
+
+.product-image-side {
+    padding: 20px;
+    height: 45vh;
+    min-height: 45vh;
+}
+
+.product-image-side .main-product-image {
+    max-height: 30vh;
+}
+
+.gallery-thumbnail {
+    width: 50px;
+    height: 50px;
+}
+
+.product-details-side {
+    padding: 20px;
+    flex: 1;
+    border-radius: 20px 20px 0 0;
+    min-height: 55vh;
+}
+
+.product-details-side h2 {
+    font-size: 1.5rem;
+}
+
+.product-price {
+    font-size: 1.2rem;
+}
+
+/* Checkout */
+.checkout-container {
+    padding: 0;
+}
+
+.checkout-content {
+    padding: 30px 20px;
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+}
+
+.checkout-content h2 {
+    font-size: 1.5rem;
+}
+
+.checkout-total {
+    font-size: 1.2rem;
+}
+
+.btn-whatsapp {
+    font-size: 1rem;
+}
+
+/* Category Description */
+.category-description {
+    padding: 40px 20px 0 20px;
+}
+.description-card {
+    padding: 35px 25px;
+    margin-top: -60px;
+    border-radius: 16px;
+}
+.description-card::before {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
+.description-card .category-text {
+    font-size: 1.05rem;
+    column-count: 1;
+    text-align: center;
+}
+
+/* Catalog Grid */
+.catalog-section {
+    flex-direction: column;
+    padding: 40px 20px;
+}
+
+.filters-sidebar {
+    width: 100%;
+    position: static;
+    margin-bottom: 20px;
+}
+
+.filter-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    flex: 1;
+    text-align: center;
+    min-width: 120px;
+}
+
+.catalog-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+}
+
+.btn-close {
+    top: 10px;
+    left: 10px;
+    font-size: 0.8rem;
+    padding: 8px 12px;
+}
+
+/* Side Cart & Menu */
+.side-cart .cart-content-panel,
+.side-menu .menu-content {
+    width: 100%;
+    max-width: 100%;
+}
