@@ -300,20 +300,22 @@ body {
 }
 
 .btn-buy {
-    background: #000;
+    background: #EF352D;
     color: #fff;
-    border: none;
+    border: 1px solid #EF352D;
     padding: 6px 18px;
     border-radius: 20px;
     font-weight: 700;
     font-size: 0.75rem;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.3s;
     width: 100%;
 }
 
 .btn-buy:hover {
-    background: #374151;
+    background: #fff;
+    color: #EF352D;
+    border-color: #EF352D;
 }
 
 .no-products {
@@ -1261,7 +1263,7 @@ body {
 }
 
 .filter-btn.active {
-    background: #000;
+    background: #EF352D;
     color: #fff;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
