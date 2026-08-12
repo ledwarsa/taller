@@ -326,28 +326,48 @@ const App = {
                 </div>
             </transition>
 
-            <!-- Internal Category Header -->
-            <header class="internal-header" v-if="isCategoryPage" :style="{ backgroundImage: 'url(./assets/' + isCategoryPage + '_bg.jpg)' }">
-                <div class="internal-overlay"></div>
-                <div class="logo-container" style="position: absolute; top: 20px; left: 20px; z-index: 10;">
-                    <a href="index.html"><img src="./assets/logo.png" alt="Logo" style="height: 60px;"></a>
+            <!-- Category Split Hero -->
+            <section class="category-split-hero" v-if="isCategoryPage && !selectedProduct && !isCheckout">
+                <!-- Left Side: Image with slanted cut -->
+                <div class="split-hero-left" :style="{ backgroundImage: 'url(./assets/' + isCategoryPage + '_bg.jpg)' }">
+                    <div class="split-hero-overlay"></div>
                 </div>
-                <div class="header-center-content" style="position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; margin-top: -30px;">
-                    <h1 class="internal-title" style="margin: 0; margin-bottom: 15px;">{{ categoryTitle }}</h1>
-                    <a href="index.html" class="btn-back-home"><i class="fa-solid fa-arrow-left"></i> Volver al Inicio</a>
-                </div>
-                <div class="menu-icons" style="position: absolute; top: 20px; right: 20px; z-index: 10; display: flex; gap: 20px; color: white; font-size: 1.5rem;">
-                    <div class="cart-icon-wrapper" @click="isCartOpen = true" style="cursor: pointer; position: relative;">
-                        <i class="fa-solid fa-shopping-cart" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);"></i>
-                        <span class="cart-badge" v-if="cartItemCount > 0">{{ cartItemCount }}</span>
-                    </div>
-                </div>
-            </header>
 
-            <!-- Category Description Block -->
-            <section class="category-description" v-if="isCategoryPage && categoryDescription && !selectedProduct && !isCheckout">
-                <div class="description-card">
-                    <div class="category-text" v-html="categoryDescription"></div>
+                <!-- Right Side: Content -->
+                <div class="split-hero-right">
+                    <!-- Top Navigation Elements -->
+                    <div class="split-hero-nav">
+                        <div class="logo-container">
+                            <a href="index.html"><img src="./assets/logo.png" alt="Logo" class="hero-logo"></a>
+                        </div>
+                        <div class="menu-icons" style="display: flex; align-items: center; gap: 20px;">
+                            <a href="index.html" class="btn-back-home-small" title="Volver al Inicio">
+                                <i class="fa-solid fa-home"></i>
+                            </a>
+                            <div class="cart-icon-wrapper" @click="isCartOpen = true" style="cursor: pointer; position: relative; color: #1f2937;">
+                                <i class="fa-solid fa-shopping-cart"></i>
+                                <span class="cart-badge" v-if="cartItemCount > 0">{{ cartItemCount }}</span>
+                            </div>
+                            <i class="fa-solid fa-bars" @click="isMenuOpen = true" style="cursor: pointer; color: #1f2937;"></i>
+                        </div>
+                    </div>
+
+                    <!-- Center Content -->
+                    <div class="split-hero-content">
+                        <div class="split-hero-category-subtitle">
+                            <i class="fa-solid fa-gem"></i> EXPLORA LA COLECCIÓN
+                        </div>
+                        <div class="split-hero-text-card">
+                            <h1 class="split-hero-title">{{ categoryTitle }}</h1>
+                            <div class="category-text split-text" v-if="categoryDescription" v-html="categoryDescription"></div>
+                            
+                            <div class="split-hero-actions">
+                                <a href="#full-catalog" class="btn-primary-red" @click.prevent="scrollToCatalog">
+                                    VER PRODUCTOS
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 

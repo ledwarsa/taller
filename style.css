@@ -1494,3 +1494,273 @@ body {
 .collection-link-card:hover .collection-link-content i {
     transform: translateX(10px);
 }
+
+
+/* ==========================================================================
+   Category Split Hero Layout (Big Hero 6 Style)
+   ========================================================================== */
+.category-split-hero {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background: #e5e7eb; /* Light gray background for right side */
+    margin-left: calc(-50vw + 50%); /* Full width hack if inside container */
+}
+
+.split-hero-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 55%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 2;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 15vw) 100%, 0 100%);
+    box-shadow: 10px 0 30px rgba(0,0,0,0.5); /* Shadow on the clipped edge */
+}
+
+/* Fallback/additional shadow for clip-path */
+.split-hero-left::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    box-shadow: inset -20px 0 50px rgba(0,0,0,0.5);
+    pointer-events: none;
+}
+
+.split-hero-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 100%);
+}
+
+.split-hero-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    padding-left: 55%; /* Start content after the left image */
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    background: linear-gradient(135deg, #f3f4f6 0%, #d1d5db 100%);
+}
+
+.split-hero-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 50px;
+    width: 100%;
+}
+
+.hero-logo {
+    height: 100px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+    transition: transform 0.3s ease;
+}
+
+.hero-logo:hover {
+    transform: scale(1.05);
+}
+
+.btn-back-home-small {
+    background: white;
+    color: #1f2937;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.btn-back-home-small:hover {
+    background: #ef352d;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.split-hero-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 80px 0 40px;
+    position: relative;
+    z-index: 3; /* Above the left clip path just in case */
+}
+
+.split-hero-category-subtitle {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #ef352d;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+}
+
+.split-hero-text-card {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.05);
+    border: 1px solid rgba(255,255,255,1);
+    position: relative;
+}
+
+/* Red line decoration on the card */
+.split-hero-text-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 40px;
+    right: 40px;
+    height: 4px;
+    background: #ef352d;
+    border-radius: 0 0 4px 4px;
+}
+
+.split-hero-title {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #1f2937;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-bottom: 25px;
+    letter-spacing: -1px;
+}
+
+.split-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #4b5563;
+    margin-bottom: 35px;
+}
+
+.split-text p {
+    margin-bottom: 15px;
+}
+
+.btn-primary-red {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #ef352d;
+    color: white !important;
+    text-decoration: none;
+    font-weight: 800;
+    padding: 15px 35px;
+    border-radius: 30px;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    box-shadow: 0 10px 20px rgba(239, 53, 45, 0.3);
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    border: 2px solid #ef352d;
+}
+
+.btn-primary-red:hover {
+    background: white;
+    color: #ef352d !important;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(239, 53, 45, 0.4);
+}
+
+@media (max-width: 1024px) {
+    .split-hero-left {
+        width: 45%;
+        clip-path: polygon(0 0, 100% 0, calc(100% - 10vw) 100%, 0 100%);
+    }
+    .split-hero-right {
+        padding-left: 45%;
+    }
+    .split-hero-content {
+        padding: 0 40px 0 20px;
+    }
+    .split-hero-title {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .category-split-hero {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+    }
+    .split-hero-left {
+        position: relative;
+        width: 100%;
+        height: 45vh;
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 40px), 0 100%);
+        z-index: 1; /* Lower than right side on mobile */
+    }
+    .split-hero-right {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding-left: 0;
+        padding-top: 20px;
+        z-index: 2; /* Higher than left side */
+    }
+    .split-hero-nav {
+        position: absolute;
+        top: -45vh; /* Exactly at the top over the image */
+        left: 0;
+        width: 100%;
+        padding: 20px; /* Reduced padding for mobile */
+        z-index: 10;
+        /* Optional: Add a subtle gradient behind nav to make icons visible on any image */
+        background: linear-gradient(to bottom, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 100%);
+    }
+    .hero-logo {
+        height: 50px; /* Smaller logo on mobile */
+    }
+    .btn-back-home-small {
+        background: rgba(255,255,255,0.8);
+        color: #1f2937;
+        backdrop-filter: blur(5px);
+    }
+    .split-hero-content {
+        padding: 10px 20px 30px 20px;
+        margin-top: -20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .split-hero-category-subtitle {
+        text-align: center;
+        margin-bottom: 15px;
+        z-index: 5;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 5px 15px;
+        border-radius: 20px;
+        backdrop-filter: blur(5px);
+    }
+    .split-hero-text-card {
+        padding: 30px 25px;
+    }
+    .split-hero-title {
+        font-size: 2.2rem;
+        text-align: center;
+    }
+    .split-text {
+        text-align: center;
+    }
+    .split-hero-actions {
+        display: flex;
+        justify-content: center;
+    }
+}
+
