@@ -110,7 +110,7 @@ body {
 }
 
 .column.active .col-content {
-    transform: translateY(-260px);
+    transform: translateY(-290px);
 }
 
 .hero-collection-btn {
@@ -175,14 +175,43 @@ body {
     bottom: -100%;
     left: 0;
     width: 100%;
-    height: 340px;
+    height: auto;
+    min-height: 250px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     z-index: 20;
     transition: bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-    padding: 30px 20px;
+    padding: 20px 15px;
+}
+
+.category-text-flyout-content {
+    color: #fff;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    text-align: left;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    height: auto;
+    max-height: 380px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    font-family: var(--font-main);
+}
+.category-text-flyout-content p {
+    margin-bottom: 10px;
+}
+.category-text-flyout-content p:last-child {
+    margin-bottom: 0;
+}
+.category-text-flyout-content.cat-libros {
+    font-size: 0.8rem;
+    line-height: 1.4;
 }
 
 .products-flyout.show {
@@ -1502,7 +1531,8 @@ body {
 .category-split-hero {
     display: flex;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
     position: relative;
     overflow: hidden;
     background: #e5e7eb; /* Light gray background for right side */
@@ -1538,11 +1568,8 @@ body {
 }
 
 .split-hero-right {
-    position: absolute;
-    top: 0;
-    right: 0;
     width: 100%;
-    height: 100%;
+    min-height: 100vh;
     padding-left: 55%; /* Start content after the left image */
     display: flex;
     flex-direction: column;
@@ -1593,7 +1620,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0 80px 0 40px;
+    padding: 40px 80px 80px 40px;
     position: relative;
     z-index: 3; /* Above the left clip path just in case */
 }
@@ -1710,6 +1737,7 @@ body {
         position: relative;
         width: 100%;
         height: auto;
+        min-height: 0;
         padding-left: 0;
         padding-top: 20px;
         z-index: 2; /* Higher than left side */

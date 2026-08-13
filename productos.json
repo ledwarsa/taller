@@ -407,7 +407,7 @@
   {
     "title": "Ebook: Cuento Lisi y LPV Por Colombia",
     "price": "18.000",
-    "image": "productos/CUENTO-LISI-Y-LPV-POR-COLOMBIA.jpg",
+    "image": "./assets/ebook_lisi_lpv.jpg",
     "description": "Población: Niños y niñas entre los 6 y 10 años. Objetivo: Enseñar a niños y niñas acerca de qué es, cómo se presenta y cómo se puede denunciar la explotación sexual comercial.",
     "options": [],
     "url": "https://redcontraelabusosexual.org/producto/ebook-cuento-lisi-y-lpv-por-colombia/",
@@ -469,7 +469,7 @@
   {
     "title": "Ebook: Cuento Los Pequeños Valientes",
     "price": "36.000",
-    "image": "https://redcontraelabusosexual.org/wp-content/uploads/2022/10/27.png",
+    "image": "./assets/ebook_lpv.jpg",
     "description": "Idioma: Español",
     "options": [],
     "category": "material",
@@ -478,7 +478,7 @@
   {
     "title": "Ebook: Les Petits Courageux",
     "price": "36.000",
-    "image": "https://redcontraelabusosexual.org/wp-content/uploads/2022/10/27.png",
+    "image": "./assets/ebook_lpv.jpg",
     "description": "Idioma: Francés",
     "options": [],
     "category": "material",

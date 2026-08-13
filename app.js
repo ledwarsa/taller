@@ -164,46 +164,7 @@ const App = {
 
                     <!-- Products Modal / Flyout when active -->
                     <div class="products-flyout" :class="{ 'show': activeCol === index }">
-                        <div class="products-scroll" 
-                             :class="{ 'sub-categories': col.category === 'pijamas' && !activeSubcategory }"
-                             :ref="el => { if (el) scrollRefs[index] = el }" 
-                             @mouseenter="pauseScroll" 
-                             @mouseleave="resumeScroll"
-                             @wheel.prevent="handleWheel"
-                             @touchstart="pauseScroll"
-                             @touchend="resumeScroll">
-                            <template v-if="col.category !== 'pijamas'">
-                                <div class="product-card" v-for="product in (categoryProductsList[col.category] || [])" :key="product.title" @click="selectProduct(product, col)">
-                                    <img :src="product.image" :alt="product.title" loading="lazy">
-                                    <h3>{{ product.title }}</h3>
-                                    <p class="price">{{ product.price ? '$' + product.price : 'Consultar' }}</p>
-                                    <button class="btn-buy">VER MÁS</button>
-                                </div>
-                                <div class="no-products" v-if="(categoryProductsList[col.category] || []).length === 0">
-                                    Próximamente
-                                </div>
-                            </template>
-                            <template v-else>
-                                <template v-if="!activeSubcategory">
-                                    <div class="product-card" v-for="product in (categoryProductsList[col.category] || []).filter(p => p.price === '0')" :key="product.title" @click="selectProduct(product, col)">
-                                        <img :src="product.image" :alt="product.title" loading="lazy">
-                                        <h3>{{ product.title }}</h3>
-                                        <button class="btn-buy">VER MÁS</button>
-                                    </div>
-                                </template>
-                                <template v-else>
-                                    <div class="back-btn-container">
-                                        <button class="btn-back-subcategory" @click.stop="activeSubcategory = null"><i class="fa-solid fa-arrow-left"></i> Volver</button>
-                                    </div>
-                                    <div class="product-card" v-for="product in (categoryProductsList[col.category] || []).filter(p => p.subcategory === activeSubcategory)" :key="product.title" @click="selectProduct(product, col)">
-                                        <img :src="product.image" :alt="product.title" loading="lazy">
-                                        <h3>{{ product.title }}</h3>
-                                        <p class="price">{{ product.price ? '$' + product.price : 'Consultar' }}</p>
-                                        <button class="btn-buy">VER MÁS</button>
-                                    </div>
-                                </template>
-                            </template>
-                        </div>
+                        <div class="category-text-flyout-content" :class="'cat-' + col.category" v-html="getCategoryDescriptionText(col.category)"></div>
                     </div>
                 </div>
                 </div>
@@ -378,13 +339,13 @@ const App = {
                         <i class="fa-solid fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #9ca3af;"></i>
                         <input type="text" v-model="searchQuery" placeholder="Buscar productos..." class="search-input" style="width: 100%; padding: 12px 15px 12px 40px; border-radius: 8px; border: 1px solid #d1d5db; background-color: white; font-family: var(--font-main); font-size: 1rem; color: #4b5563; outline: none; box-sizing: border-box;">
                     </div>
-                    <template v-if="!isCategoryPage">
                         <h3>Categorías</h3>
                         <div class="filter-list">
                             <button class="filter-btn" :class="{ active: activeFilterCategory === 'todos' }" @click="handleCategoryClick('todos')">Todos los Productos</button>
                             <button class="filter-btn" :class="{ active: activeFilterCategory === 'material' }" @click="handleCategoryClick('material')">Material Pedagógico</button>
                             <button class="filter-btn" :class="{ active: activeFilterCategory === 'prendas' }" @click="handleCategoryClick('prendas')">Prendas de Vestir</button>
                             <button class="filter-btn" :class="{ active: activeFilterCategory === 'marca' }" @click="handleCategoryClick('marca')">Productos de Marca</button>
+                            <button class="filter-btn" :class="{ active: activeFilterCategory === 'libros' }" @click="handleCategoryClick('libros')">Libros y Cuentos</button>
                             <div>
                                 <button class="filter-btn" :class="{ active: ['pijamas', 'Colección Los Pequeños Valientes', 'Colección Libre y Segura'].includes(activeFilterCategory) }" @click="handleCategoryClick('pijamas')" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                                     Pijamas
@@ -396,9 +357,7 @@ const App = {
                                 </div>
                             </div>
                         </div>
-                    </template>
-                    
-                    <h3 :style="{ marginTop: isCategoryPage ? '0' : '40px' }">Precio</h3>
+                    <h3 style="margin-top: 40px;">Precio</h3>
                     <div class="filter-list">
                         <select v-model="activePriceFilter" class="price-select" style="width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #d1d5db; background-color: white; font-family: var(--font-main); font-size: 1rem; font-weight: 600; color: #4b5563; outline: none; cursor: pointer;">
                             <option value="todos">Todos los precios</option>
@@ -455,7 +414,7 @@ const App = {
             { id: 2, title: 'Prendas de Vestir', category: 'prendas', image: './assets/prendas_bg.jpg' },
             { id: 3, title: 'Productos de Marca', category: 'marca', image: './assets/marca_bg.jpg' },
             { id: 4, title: 'Pijamas', category: 'pijamas', image: './assets/Gemini_Generated_Image_li9jjvli9jjvli9j.jpg' },
-            { id: 5, title: 'Todos los Productos', category: 'todos', image: './assets/todos_bg2.jpg' }
+            { id: 5, title: 'Libros y Cuentos', category: 'libros', image: './assets/todos_bg2.jpg' }
         ]);
 
         const activeCol = ref(null);
@@ -480,20 +439,27 @@ const App = {
                 'material': 'Material Pedagógico',
                 'prendas': 'Prendas de Vestir',
                 'marca': 'Productos de Marca',
-                'pijamas': 'Pijamas'
+                'pijamas': 'Pijamas',
+                'libros': 'Libros y Cuentos'
             };
             return titles[isCategoryPage] || '';
         });
 
-        const categoryDescription = computed(() => {
-            if (!isCategoryPage) return '';
+        const getCategoryDescriptionText = (category) => {
             const descriptions = {
                 'material': '<p>Yako y Lila, los dos personajes principales de nuestro cuento “Los Pequeños Valientes”, ¡han creado su propio taller de herramientas! Aquí, ellos han diseñado diferentes juegos y herramientas pedagógicas que ayudarán a otros niños, niñas y adolescentes (NNA) a prevenir, detectar y denunciar el abuso sexual infantil (ASI).</p><p>Estas herramientas están diseñadas para usarse bajo la supervisión y guía de los adultos responsables, es decir, los papás y las mamás, para que todos puedan aprender en familia de forma divertida.</p>',
                 'prendas': '<p>En la Fundación Red, sabemos que los niños, niñas y adolescentes (NNA) necesitan herramientas divertidas y útiles para aprender.</p><p>Por eso, con la creación de hoodies y camisetas, tenemos una herramienta de comunicación visual al mismo tiempo que plasmamos un mensaje contundente: la prevención comienza desde la protección del espacio personal.</p>',
                 'marca': '<p>Con estos productos queremos estar presentes y acompañarte en tu día a dia. Cuando te tomes un café o quieras escribir tus pensamientos e ideas inspiradoras...</p><p>Yako, Lila, o Lisi te recordarán la importancia de ser valientes con nuestros mugs y lapiceros que representan nuestro compromiso a cuidar a los niños, niñas y adolescentes.</p>',
-                'pijamas': '<p>En esta campaña las pijamas simbolizan un escudo protector. La pijama es diseñada tipo onesie, o en otras palabras, una sola pieza o enterizo.</p><p>De esta manera, creamos una analogía donde la protección hacia el cuerpo debe ser total, así como el espacio físico que cubre la prenda, es decir, el cuerpo entero. Constituye un símbolo de empoderamiento a través del mensaje de autoprotección y autocuidado que lleva.</p>'
+                'pijamas': '<p>En esta campaña las pijamas simbolizan un escudo protector. La pijama es diseñada tipo onesie, o en otras palabras, una sola pieza o enterizo.</p><p>De esta manera, creamos una analogía donde la protección hacia el cuerpo debe ser total, así como el espacio físico que cubre la prenda, es decir, el cuerpo entero. Constituye un símbolo de empoderamiento a través del mensaje de autoprotección y autocuidado que lleva.</p>',
+                'libros': '<p>Desde hace más de 20 años, hemos creado diferentes formas/estrategias para que los niños y las niñas aprendan a protegerse del abuso sexual infantil (ASI). Entre cuentos y juegos infantiles, tenemos para ustedes una variedad de herramientas pedagógicas para que puedan enseñar a sus hijos con facilidad este tema.</p><p>Como Yako y Lila saben, que la educación en prevención de ASI no es únicamente de los niños, sino también de los adultos -pues saben que los papás y las mamás también necesitan ayuda para abordar este tema con sus hijos-, disponen en su taller de herramientas para ellos como los libros “Lo que Debes Saber del Abuso Sexual Infantil”, y “Los Niños del Viento”.</p><p>Estas herramientas son ideales para los docentes en los colegios, los padres de familia y en general quienes tengan a su cuidado menores de edad.</p>',
+                'todos': '<p>Explora todo nuestro catálogo de productos con un propósito. Desde material pedagógico hasta prendas de vestir que llevan nuestro mensaje de prevención.</p>'
             };
-            return descriptions[isCategoryPage] || '';
+            return descriptions[category] || '';
+        };
+
+        const categoryDescription = computed(() => {
+            if (!isCategoryPage) return '';
+            return getCategoryDescriptionText(isCategoryPage);
         });
 
         const handleCategoryClick = (cat) => {
@@ -634,7 +600,7 @@ const App = {
             const lists = {};
             if (!products.value) return lists;
             
-            ['material', 'prendas', 'marca', 'pijamas', 'todos'].forEach(cat => {
+            ['material', 'prendas', 'marca', 'pijamas', 'libros', 'todos'].forEach(cat => {
                 let result = [];
                 if (cat === 'todos') {
                     result = [...products.value];
@@ -651,6 +617,7 @@ const App = {
                             if (cat === 'material') return title.includes('combo') || title.includes('kit') || title.includes('rompecabezas') || title.includes('láminas') || title.includes('cuento') || title.includes('libro') || title.includes('ebook') || title.includes('dominó') || title.includes('lotería') || title.includes('abanico');
                             if (cat === 'prendas') return title.includes('hoodie') || title.includes('pijama');
                             if (cat === 'marca') return title.includes('mug') || title.includes('vaso');
+                            if (cat === 'libros') return title.includes('cuento') || title.includes('libro') || title.includes('ebook');
                             return false;
                         });
                     }
@@ -827,6 +794,7 @@ const App = {
             isCategoryPage,
             categoryTitle,
             categoryDescription,
+            getCategoryDescriptionText,
             handleCategoryClick,
             handleSubcategoryClick,
             navigateToCategory

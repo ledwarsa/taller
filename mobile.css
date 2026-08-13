@@ -69,17 +69,12 @@
 }
 
 .column.active .col-content {
-    transform: translateY(-240px) !important;
+    transform: translateY(-20px) !important;
 }
 
 /* Products Flyout */
 .products-flyout {
-    height: 220px !important; /* Shorter for mobile */
-    padding: 15px 10px !important;
-}
-
-.products-flyout.show {
-    bottom: 20px !important; /* Inside the column, below the title */
+    display: none !important;
 }
 
 /* Product Cards */
